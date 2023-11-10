@@ -8,6 +8,9 @@ on:
 jobs:
   php-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      COMPOSER_NO_INTERACTION: 1
 
     steps:
       - name: Checkout code
@@ -33,5 +36,14 @@ jobs:
       - name: Run Pest Tests
         run: ./vendor/bin/pest --colors=always
 
-#      - name: PHP CodeSniffer Analysis
-#        run: ./vendor/bin/phpcs
+      - name: Execute PHPStan
+        run: php vendor/bin/phpstan analyse src tests --level 8 --error-format=github
+
+      - name: Fake
+        run: |
+          echo ::notice \
+            file=$PWD/src/Hugger/Friendly.php,line=1,col=0::this is a notice
+          echo ::warning \
+            file=$PWD/src/Hugger/Friendly.php,line=1,col=0::this is a warning
+          echo ::error \
+            file=$PWD/src/Hugger/Friendly.php,line=1,col=0::this is a error
