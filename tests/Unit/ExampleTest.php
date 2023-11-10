@@ -2,5 +2,5 @@
 
 test('example', function () {
     expect(true)->toBeTrue();
-    expect(false)->toBeFalse();
+    expect(true)->toBeFalse();
 });
