@@ -1,0 +1,16 @@
+{
+    "name": "matheussouzajose/survey",
+    "description": "Survey Project",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Matheussouzajose\\Survey\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matheus Souza Jose"
+        }
+    ],
+    "require": {}
+}
