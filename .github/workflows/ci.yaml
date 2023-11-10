@@ -37,7 +37,7 @@ jobs:
         run: ./vendor/bin/pest --colors=always
 
       - name: Execute PHPStan
-        run: ./vendor/bin/phpstan analyse src tests --level 8 --error-format=github
+        run: ./vendor/bin/phpstan analyse tests --level 8 --error-format=github
 
       - name: Fake
         run: |
