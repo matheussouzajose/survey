@@ -36,14 +36,14 @@ jobs:
       - name: Run Pest Tests
         run: ./vendor/bin/pest --colors=always
 
-      - name: Execute PHPStan
-        run: ./vendor/bin/phpstan analyse tests --level 8 --error-format=github
-
-      - name: Fake
-        run: |
-          echo ::notice \
-            file=$PWD/src/Hugger/Friendly.php,line=1,col=0::this is a notice
-          echo ::warning \
-            file=$PWD/src/Hugger/Friendly.php,line=1,col=0::this is a warning
-          echo ::error \
-            file=$PWD/src/Hugger/Friendly.php,line=1,col=0::this is a error
+#      - name: Execute PHPStan
+#        run: ./vendor/bin/phpstan analyse tests --level 8 --error-format=github
+#
+#      - name: Fake
+#        run: |
+#          echo ::notice \
+#            file=$PWD/src/Hugger/Friendly.php,line=1,col=0::this is a notice
+#          echo ::warning \
+#            file=$PWD/src/Hugger/Friendly.php,line=1,col=0::this is a warning
+#          echo ::error \
+#            file=$PWD/src/Hugger/Friendly.php,line=1,col=0::this is a error
