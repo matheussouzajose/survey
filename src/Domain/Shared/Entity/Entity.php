@@ -2,11 +2,19 @@
 
 namespace Core\Domain\Shared\Entity;
 
+use Core\Domain\Shared\Notification\NotificationError;
 use Core\Domain\Shared\Traits\MethodsMagicsTrait;
 
 abstract class Entity
 {
     use MethodsMagicsTrait;
+
+    protected NotificationError $notificationError;
+
+    public function __construct()
+    {
+        $this->notificationError = new NotificationError();
+    }
 
     public function id(): string
     {

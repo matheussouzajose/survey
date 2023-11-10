@@ -16,7 +16,8 @@
     ],
     "require-dev": {
         "pestphp/pest": "^2.24",
-        "phpstan/phpstan": "^1.10"
+        "phpstan/phpstan": "^1.10",
+        "respect/validation": "^2.2"
     },
     "scripts": {
         "test": [
@@ -30,5 +31,8 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
+    },
+    "require": {
+        "ramsey/uuid": "^4.7"
     }
 }
