@@ -4,7 +4,7 @@ use Core\Domain\Account\Entity\Account;
 use Core\Domain\Shared\Exceptions\NotificationErrorException;
 
 describe('Account Suite Test', function () {
-    it('should throws error when given invalid data', function ($firstName, $lastName, $email, $password) {
+    it('Should throws error when given invalid data', function ($firstName, $lastName, $email, $password) {
         new Account(
             firstName: $firstName,
             lastName: $lastName,
@@ -20,7 +20,7 @@ describe('Account Suite Test', function () {
             ['Matheus', 'Jose', 'matheus.jose@mail.com', ''],
         ]);
 
-    it('should ensure account are correct values', function () {
+    it('Should ensure account are correct values', function () {
         $account = new Account(
             firstName: 'Matheus',
             lastName: 'Jose',
@@ -37,7 +37,7 @@ describe('Account Suite Test', function () {
         expect($account->password)->toBe('123456789');
     });
 
-    it('should ensure change full name', function () {
+    it('Should ensure change full name', function () {
         $account = new Account(
             firstName: 'Matheus',
             lastName: 'Jose',
@@ -54,7 +54,7 @@ describe('Account Suite Test', function () {
         expect($account->lastName)->toBe('Souza');
     });
 
-    it('should ensure change email', function () {
+    it('Should ensure change email', function () {
         $account = new Account(
             firstName: 'Matheus',
             lastName: 'Jose',
@@ -69,7 +69,7 @@ describe('Account Suite Test', function () {
         expect($account->email)->toBe('joao@mail.com');
     });
 
-    it('should ensure change password', function () {
+    it('Should ensure change password', function () {
         $account = new Account(
             firstName: 'Matheus',
             lastName: 'Jose',
@@ -83,5 +83,4 @@ describe('Account Suite Test', function () {
 
         expect($account->password)->toBe('password');
     });
-
 });

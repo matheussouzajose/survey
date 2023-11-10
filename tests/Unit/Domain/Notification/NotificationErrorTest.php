@@ -3,7 +3,7 @@
 use Core\Domain\Shared\Notification\NotificationError;
 
 describe('Notification Error Suite Test', function () {
-    it('should ensure that errors is an array', function () {
+    it('Should ensure that errors is an array', function () {
         $notificationError = new NotificationError();
 
         $errors = $notificationError->getErrors();
@@ -11,7 +11,7 @@ describe('Notification Error Suite Test', function () {
         expect($errors)->toBeArray();
     });
 
-    it('should add a single error when an error is added', function () {
+    it('Should add a single error when an error is added', function () {
         $notificationError = new NotificationError();
         $notificationError->addError([
             'context' => 'account',
@@ -21,7 +21,7 @@ describe('Notification Error Suite Test', function () {
         expect($notificationError->getErrors())->toHaveCount(1);
     });
 
-    it('should ensure that has an error results when adding error', function () {
+    it('Should ensure that has an error results when adding error', function () {
         $notificationError = new NotificationError();
 
         expect($notificationError->hasErrors())->toBeFalse();
@@ -34,7 +34,7 @@ describe('Notification Error Suite Test', function () {
         expect($notificationError->hasErrors())->toBeTrue();
     });
 
-    it('should return a formatted string with concatenated error messages for all contexts', function () {
+    it('Should return a formatted string with concatenated error messages for all contexts', function () {
         $notificationError = new NotificationError();
         $notificationError->addError([
             'context' => 'account',
@@ -53,7 +53,7 @@ describe('Notification Error Suite Test', function () {
 
     });
 
-    it('should return a formatted string with concatenated error messages for all contexts filtered', function () {
+    it('Should return a formatted string with concatenated error messages for all contexts filtered', function () {
         $notificationError = new NotificationError();
         $notificationError->addError([
             'context' => 'account',
