@@ -4,13 +4,22 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "Matheussouzajose\\Survey\\": "src/"
+            "Core\\": "src/",
+            "Tests\\": "tests/"
         }
     },
     "authors": [
         {
-            "name": "Matheus Souza Jose"
+            "name": "Matheus Souza Jose",
+            "email": "matheus.jose@aluno.faculdadeimpacta.com.br"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "pestphp/pest": "^2.24"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
 }
