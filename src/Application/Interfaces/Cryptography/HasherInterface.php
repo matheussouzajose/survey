@@ -6,5 +6,5 @@ interface HasherInterface
 {
     public function hash(string $plaintext): string;
 
-    public function compare(string $plaintext, string $digest): bool;
+    public function compare(string $plaintext, string $hash): bool;
 }
