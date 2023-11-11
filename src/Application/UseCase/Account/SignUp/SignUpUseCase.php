@@ -4,15 +4,20 @@ namespace Core\Application\UseCase\Account\SignUp;
 
 use Core\Application\Interfaces\Cryptography\HasherInterface;
 use Core\Domain\Account\Entity\Account;
+use Core\Domain\Account\Event\AccountCreatedEvent;
 use Core\Domain\Account\Exceptions\EmailAlreadyInUseException;
 use Core\Domain\Account\Repository\AccountRepositoryInterface;
+use Core\Domain\Shared\Event\EventDispatcher;
 use Core\Domain\Shared\Exceptions\NotificationErrorException;
+use Core\Domain\Shared\Repository\DbTransactionInterface;
 
 class SignUpUseCase
 {
     public function __construct(
         protected AccountRepositoryInterface $accountRepository,
-        protected HasherInterface $hasher
+        protected HasherInterface $hasher,
+        protected DbTransactionInterface $dbTransaction,
+        protected EventDispatcher $eventDispatcher
     ) {
     }
 
@@ -21,19 +26,32 @@ class SignUpUseCase
      */
     public function __invoke(SignUpInputDto $input): SignUpOutputDto
     {
-        if ( $this->accountRepository->checkByEmail(email: $input->email) ) {
-            throw EmailAlreadyInUseException::email(email: $input->email);
-        }
+        try {
+            if ( $this->accountRepository->checkByEmail(email: $input->email) ) {
+                throw EmailAlreadyInUseException::email(email: $input->email);
+            }
 
-        $hashedPassword = $this->hasher->hash(plaintext: $input->password);
-        $account = new Account(
-            firstName: $input->firstName,
-            lastName: $input->lastName,
-            email: $input->email,
-            password: $hashedPassword
-        );
-        $result = $this->accountRepository->add(account: $account);
-        return $this->output(account: $result);
+            $hashedPassword = $this->hasher->hash(plaintext: $input->password);
+            $result = $this->accountRepository->add(
+                account: new Account(
+                    firstName: $input->firstName,
+                    lastName: $input->lastName,
+                    email: $input->email,
+                    password: $hashedPassword
+                )
+            );
+
+            $this->eventDispatcher->notify(
+                event: new AccountCreatedEvent(account: $result)
+            );
+
+            $this->dbTransaction->commit();
+
+            return $this->output(account: $result);
+        } catch (\Exception $exception) {
+            $this->dbTransaction->rollback();
+            throw $exception;
+        }
     }
 
     protected function output(Account $account): SignUpOutputDto

@@ -1,0 +1,48 @@
+<?php
+
+namespace Core\Domain\Shared\Event;
+
+class EventDispatcher implements EventDispatcherInterface
+{
+    /** @var EventHandlerInterface[] */
+    protected array $eventsHandlers;
+
+    public function getEventHandlers(): array
+    {
+        return $this->eventsHandlers;
+    }
+
+    public function notify(EventInterface $event): void
+    {
+//        $eventName = basename(str_replace('\\', '/', get_class($event)));
+        $eventName = get_class($event);
+
+        if ( isset($this->eventsHandlers[$eventName]) ) {
+            foreach ($this->eventsHandlers[$eventName] as $eventsHandler) {
+                $eventsHandler->handle($event);
+            }
+        }
+    }
+
+    public function register(string $eventName, EventHandlerInterface $eventHandler): void
+    {
+        if ( !isset($this->eventsHandlers[$eventName]) ) {
+            $this->eventsHandlers[$eventName] = [];
+        }
+        $this->eventsHandlers[$eventName][] = $eventHandler;
+    }
+
+    public function unregister(string $eventName, EventHandlerInterface $eventHandler): void
+    {
+        if ( isset($this->eventsHandlers[$eventName]) ) {
+            if ( ($key = array_search($eventHandler, (array)$this->eventsHandlers[$eventName], true)) !== false ) {
+                unset($this->eventsHandlers[$eventName][$key]);
+            }
+        }
+    }
+
+    public function unregisterAll(): void
+    {
+        $this->eventsHandlers = [];
+    }
+}
