@@ -126,4 +126,4 @@ describe('Sign Up UseCase', function () {
 
         $this->eventDispacther->shouldHaveReceived('notify')->with(AccountCreatedEvent::class)->once();
     });
-})->only();
+});

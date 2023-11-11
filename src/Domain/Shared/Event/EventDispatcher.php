@@ -14,9 +14,7 @@ class EventDispatcher implements EventDispatcherInterface
 
     public function notify(EventInterface $event): void
     {
-//        $eventName = basename(str_replace('\\', '/', get_class($event)));
         $eventName = get_class($event);
-
         if ( isset($this->eventsHandlers[$eventName]) ) {
             foreach ($this->eventsHandlers[$eventName] as $eventsHandler) {
                 $eventsHandler->handle($event);
