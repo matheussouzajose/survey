@@ -21,6 +21,10 @@ describe('Sign Up UseCase', function () {
 
     beforeEach(function () {
         $this->accountRepository = spy(AccountRepositoryInterface::class);
+        $this->hasher = spy(HasherInterface::class);
+        $this->dbTransaction = spy(DbTransactionInterface::class);
+        $this->eventDispacther = spy(EventDispatcher::class);
+
         $this->accountRepository->shouldReceive('add')->andReturn(
             new Account(
                 firstName: 'Matheus',
@@ -29,13 +33,7 @@ describe('Sign Up UseCase', function () {
                 password: '123456789'
             )
         );
-
-        $this->hasher = spy(HasherInterface::class);
         $this->hasher->shouldReceive('hash')->andReturn('hashed_password');
-
-        $this->dbTransaction = spy(DbTransactionInterface::class);
-
-        $this->eventDispacther = spy(EventDispatcher::class);
 
         $this->signUpUseCase = new SignUpUseCase(
             accountRepository: $this->accountRepository,
@@ -56,17 +54,11 @@ describe('Sign Up UseCase', function () {
         function () use ($signUpInputDto) {
             $this->accountRepository->shouldReceive('checkByEmail')->andReturn(true);
 
-            $signUpUseCase = new SignUpUseCase(
-                accountRepository: $this->accountRepository,
-                hasher: $this->hasher,
-                dbTransaction: $this->dbTransaction,
-                eventDispatcher: $this->eventDispacther,
-            );
-            ($signUpUseCase)(input: $signUpInputDto);
-            ($this->signUpUseCase)(input: $signUpInputDto);
-
+            expect(function () use ($signUpInputDto) {
+                ($this->signUpUseCase)(input: $signUpInputDto);
+            })->toThrow(EmailAlreadyInUseException::class);
         }
-    )->throws(EmailAlreadyInUseException::class);
+    );
 
     it('Should invoke hasher with correct plaintext', function () use ($signUpInputDto) {
         ($this->signUpUseCase)(input: $signUpInputDto);
@@ -85,8 +77,10 @@ describe('Sign Up UseCase', function () {
             eventDispatcher: $this->eventDispacther,
         );
 
-        ($signUpUseCase)(input: $signUpInputDto);
-    })->throws(\Exception::class);
+        expect(function () use ($signUpInputDto, $signUpUseCase) {
+            ($signUpUseCase)(input: $signUpInputDto);
+        })->toThrow(\Exception::class);
+    });
 
     it('Should invoke add account with correct values', function () use ($signUpInputDto) {
         ($this->signUpUseCase)(input: $signUpInputDto);
@@ -103,8 +97,11 @@ describe('Sign Up UseCase', function () {
             dbTransaction: $this->dbTransaction,
             eventDispatcher: $this->eventDispacther,
         );
-        ($signUpUseCase)(input: $signUpInputDto);
-    })->throws(\Exception::class);
+
+        expect(function () use ($signUpInputDto, $signUpUseCase) {
+            ($signUpUseCase)(input: $signUpInputDto);
+        })->toThrow(\Exception::class);
+    });
 
     it('Should return a valid SignUpOutputDto on success', function () use ($signUpInputDto) {
         $result = ($this->signUpUseCase)(input: $signUpInputDto);
@@ -123,7 +120,6 @@ describe('Sign Up UseCase', function () {
 
         $this->dbTransaction->shouldHaveReceived('commit')->once();
     });
-
 
     it('Should invoke event dispatcher with correct value', function () use ($signUpInputDto) {
         ($this->signUpUseCase)(input: $signUpInputDto);

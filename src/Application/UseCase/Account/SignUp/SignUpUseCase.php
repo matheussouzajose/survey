@@ -27,31 +27,59 @@ class SignUpUseCase
     public function __invoke(SignUpInputDto $input): SignUpOutputDto
     {
         try {
-            if ( $this->accountRepository->checkByEmail(email: $input->email) ) {
-                throw EmailAlreadyInUseException::email(email: $input->email);
-            }
+            $this->checkEmailAvailability(email: $input->email);
 
-            $hashedPassword = $this->hasher->hash(plaintext: $input->password);
-            $result = $this->accountRepository->add(
-                account: new Account(
-                    firstName: $input->firstName,
-                    lastName: $input->lastName,
-                    email: $input->email,
-                    password: $hashedPassword
+            $result = $this->createAccount(
+                input: $input,
+                hashedPassword: $this->hashPassword(
+                    plaintext: $input->password
                 )
             );
 
-            $this->eventDispatcher->notify(
-                event: new AccountCreatedEvent(account: $result)
-            );
+            $this->dispatchAccountCreatedEvent($result);
 
             $this->dbTransaction->commit();
 
             return $this->output(account: $result);
-        } catch (\Exception $exception) {
+        } catch (EmailAlreadyInUseException|NotificationErrorException $exception) {
             $this->dbTransaction->rollback();
             throw $exception;
         }
+    }
+
+    /**
+     * @throws EmailAlreadyInUseException
+     */
+    protected function checkEmailAvailability(string $email): void
+    {
+        if ( $this->accountRepository->checkByEmail($email) ) {
+            throw EmailAlreadyInUseException::email($email);
+        }
+    }
+
+    protected function hashPassword(string $plaintext): string
+    {
+        return $this->hasher->hash($plaintext);
+    }
+
+    /**
+     * @throws NotificationErrorException
+     */
+    protected function createAccount(SignUpInputDto $input, string $hashedPassword): Account
+    {
+        return $this->accountRepository->add(
+            new Account(
+                firstName: $input->firstName,
+                lastName: $input->lastName,
+                email: $input->email,
+                password: $hashedPassword
+            )
+        );
+    }
+
+    protected function dispatchAccountCreatedEvent(Account $account): void
+    {
+        $this->eventDispatcher->notify(new AccountCreatedEvent(account: $account));
     }
 
     protected function output(Account $account): SignUpOutputDto
