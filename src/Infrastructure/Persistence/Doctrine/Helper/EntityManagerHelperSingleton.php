@@ -51,9 +51,9 @@ class EntityManagerHelperSingleton
 
         $entityManager = new EntityManager(self::connection(dbParams: $dbParams), self::configuration());
 
-        if ( $isTesting ) {
-            self::schemaTools(entityManager: $entityManager);
-        }
+//        if ( $isTesting ) {
+//            self::schemaTools(entityManager: $entityManager);
+//        }
 
         return $entityManager;
     }
