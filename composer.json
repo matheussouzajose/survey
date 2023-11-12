@@ -18,7 +18,8 @@
         "pestphp/pest": "^2.24",
         "phpstan/phpstan": "^1.10",
         "respect/validation": "^2.2",
-        "mockery/mockery": "^1.6"
+        "mockery/mockery": "^1.6",
+        "doctrine/doctrine-fixtures-bundle": "^3.4"
     },
     "scripts": {
         "test": [
@@ -34,6 +35,9 @@
         }
     },
     "require": {
-        "ramsey/uuid": "^4.7"
+        "ramsey/uuid": "^4.7",
+        "doctrine/orm": "^2.16",
+        "doctrine/doctrine-bundle": "^2.10",
+        "doctrine/annotations": "^2.0"
     }
 }
