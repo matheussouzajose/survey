@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Domain\Shared\ValueObject;
 
 use Core\Domain\Shared\Exceptions\UuidException;

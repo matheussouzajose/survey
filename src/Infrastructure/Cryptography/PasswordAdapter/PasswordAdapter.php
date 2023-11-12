@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Infrastructure\Cryptography\PasswordAdapter;
 
 use Core\Application\Interfaces\Cryptography\HasherInterface;

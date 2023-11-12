@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Domain\Account\Repository;
 
 use Core\Domain\Account\Entity\Account;

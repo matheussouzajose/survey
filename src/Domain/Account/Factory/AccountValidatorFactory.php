@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Domain\Account\Factory;
 
 use Core\Domain\Account\Validator\AccountValidator;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\UseCase\Account\SignUp;
 
 use Core\Application\Interfaces\Cryptography\HasherInterface;
