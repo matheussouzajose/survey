@@ -5,7 +5,7 @@ use Core\Ui\Api\Controller\Account\SignUpController;
 use Core\Ui\Api\Validator\SignUpValidatorRequest;
 
 describe('Sign Up Controller', function () {
-    it('', function () {
+    it('Should ensure sign up account success', function () {
         $useCase = spy(SignUpUseCase::class);
         $validation = new SignUpValidatorRequest();
 
