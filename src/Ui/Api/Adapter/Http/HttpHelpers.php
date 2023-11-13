@@ -13,7 +13,7 @@ class HttpHelpers
 
     public static function created($data): HttpResponseAdapter
     {
-        return new HttpResponseAdapter(statusCode: 200, body: $data);
+        return new HttpResponseAdapter(statusCode: 201, body: $data);
     }
 
     public static function noContent(): HttpResponseAdapter

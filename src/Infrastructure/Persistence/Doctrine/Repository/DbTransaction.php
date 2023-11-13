@@ -13,16 +13,7 @@ class DbTransaction implements DbTransactionInterface
 {
     /**
      * @throws MissingMappingDriverImplementation
-     * @throws ToolsException
-     */
-    public function __construct()
-    {
-        EntityManagerHelperSingleton::getInstance()->beginTransaction();
-    }
-
-    /**
-     * @throws MissingMappingDriverImplementation
-     * @throws ToolsException
+     * @throws ToolsException|\Exception
      */
     public function commit(): void
     {
@@ -31,10 +22,15 @@ class DbTransaction implements DbTransactionInterface
 
     /**
      * @throws MissingMappingDriverImplementation
-     * @throws ToolsException
+     * @throws ToolsException|\Exception
      */
     public function rollback(): void
     {
         EntityManagerHelperSingleton::getInstance()->rollBack();
+    }
+
+    public function beginTransaction(): void
+    {
+        EntityManagerHelperSingleton::getInstance()->beginTransaction();
     }
 }

@@ -6,6 +6,8 @@ namespace Core\Domain\Shared\Repository;
 
 interface DbTransactionInterface
 {
+    public function beginTransaction();
+
     public function commit();
 
     public function rollback();

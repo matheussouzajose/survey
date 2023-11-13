@@ -46,6 +46,8 @@ describe('DbTransaction Test', function () {
 
     it('should ensure that it will be saved after commit', function () {
         $dbTransaction = new DbTransaction();
+        $dbTransaction->beginTransaction();
+
         $entityManager = EntityManagerHelperSingleton::getInstance();
 
         $account = createAccount();
@@ -60,6 +62,8 @@ describe('DbTransaction Test', function () {
 
     it('should ensure that it will not be saved after rollback', function () {
         $dbTransaction = new DbTransaction();
+        $dbTransaction->beginTransaction();
+
         $entityManager = EntityManagerHelperSingleton::getInstance();
 
         $account = createAccount();

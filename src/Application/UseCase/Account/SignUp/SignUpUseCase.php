@@ -29,6 +29,8 @@ class SignUpUseCase
     public function __invoke(SignUpInputDto $input): SignUpOutputDto
     {
         try {
+            $this->dbTransaction->beginTransaction();
+
             $this->checkEmailAvailability(email: $input->email);
 
             $result = $this->createAccount(

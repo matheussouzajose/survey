@@ -15,6 +15,8 @@ class ErrorMiddleware
     public static function setup(App $app): void
     {
         $errorMiddleware = $app->addErrorMiddleware(true, true, true);
+        $errorHandler = $errorMiddleware->getDefaultErrorHandler();
+        $errorHandler->forceContentType('application/json');
 
         $errorMiddleware->setErrorHandler(
             HttpNotFoundException::class,

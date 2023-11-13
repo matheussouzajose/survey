@@ -4,7 +4,7 @@ use Core\Application\UseCase\Account\SignUp\SignUpUseCase;
 use Core\Ui\Api\Controller\Account\SignUpController;
 use Core\Ui\Api\Validator\SignUpValidatorRequest;
 
-describe('', function () {
+describe('Sign Up Controller', function () {
     it('', function () {
         $useCase = spy(SignUpUseCase::class);
         $validation = new SignUpValidatorRequest();
@@ -18,6 +18,9 @@ describe('', function () {
         $request->password = '123456789';
         $request->password_confirmation = '123456789';
 
-        var_dump(($controller)($request)->getBody());
-    })->only();
+        $result = ($controller)($request);
+
+        expect($result->getStatusCode())->toBe(201);
+        expect($result->getBody())->toBeArray();
+    });
 });

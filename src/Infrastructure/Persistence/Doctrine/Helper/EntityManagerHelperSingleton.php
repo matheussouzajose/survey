@@ -8,7 +8,6 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Exception\MissingMappingDriverImplementation;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
@@ -26,8 +25,6 @@ class EntityManagerHelperSingleton
     }
 
     /**
-     * @throws MissingMappingDriverImplementation
-     * @throws ToolsException
      * @throws \Exception
      */
     public static function getInstance(): EntityManager
@@ -39,11 +36,6 @@ class EntityManagerHelperSingleton
         return self::$entityManagerInstance;
     }
 
-    /**
-     * @throws MissingMappingDriverImplementation
-     * @throws Exception
-     * @throws ToolsException
-     */
     private static function getEntityManager(): EntityManager
     {
         $isTesting = getenv('APP_ENV') === 'testing';
@@ -51,9 +43,9 @@ class EntityManagerHelperSingleton
 
         $entityManager = new EntityManager(self::connection(dbParams: $dbParams), self::configuration());
 
-//        if ( $isTesting ) {
-//            self::schemaTools(entityManager: $entityManager);
-//        }
+        if ( $isTesting ) {
+            self::schemaTools(entityManager: $entityManager);
+        }
 
         return $entityManager;
     }
@@ -88,7 +80,9 @@ class EntityManagerHelperSingleton
     private static function configuration(): Configuration
     {
         $paths = __DIR__ . "/../../../../../src/Infrastructure/Persistence/Doctrine/Mapping/";
-        return ORMSetup::createAttributeMetadataConfiguration([$paths], true);
+        $config = ORMSetup::createAttributeMetadataConfiguration([$paths], true);
+        $config->setAutoGenerateProxyClasses(true);
+        return $config;
     }
 
 
