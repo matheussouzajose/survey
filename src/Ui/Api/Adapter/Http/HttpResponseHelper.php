@@ -46,8 +46,8 @@ class HttpHelpers
         return new HttpResponseAdapter(statusCode: 422, body: $errors);
     }
 
-    public static function serverError($error): HttpResponseAdapter
+    public static function serverError(): HttpResponseAdapter
     {
-        return new HttpResponseAdapter(statusCode: 500, body: $error);
+        return new HttpResponseAdapter(statusCode: 500, body: 'Ocorreu um erro inesperado durante o processamento da requisição.');
     }
 }
