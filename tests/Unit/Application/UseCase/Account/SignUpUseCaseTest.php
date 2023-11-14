@@ -1,6 +1,7 @@
 <?php
 
 use Core\Application\Interfaces\Cryptography\HasherInterface;
+use Core\Application\Interfaces\Validator\ValidatorInterface;
 use Core\Application\UseCase\Account\SignUp\SignUpInputDto;
 use Core\Application\UseCase\Account\SignUp\SignUpOutputDto;
 use Core\Application\UseCase\Account\SignUp\SignUpUseCase;
@@ -16,7 +17,8 @@ describe('Sign Up UseCase', function () {
         firstName: 'Matheus',
         lastName: 'Jose',
         email: 'matheus.jose@mail.com',
-        password: '123456789'
+        password: '123456789',
+        passwordConfirmation: '123456789',
     );
 
     beforeEach(function () {
@@ -35,11 +37,13 @@ describe('Sign Up UseCase', function () {
         );
         $this->hasher->shouldReceive('hash')->andReturn('hashed_password');
 
+        $this->validator = spy(ValidatorInterface::class);
         $this->signUpUseCase = new SignUpUseCase(
             accountRepository: $this->accountRepository,
             hasher: $this->hasher,
             dbTransaction: $this->dbTransaction,
             eventDispatcher: $this->eventDispacther,
+            validator: $this->validator
         );
     });
 
@@ -75,6 +79,7 @@ describe('Sign Up UseCase', function () {
             hasher: $hasher,
             dbTransaction: $this->dbTransaction,
             eventDispatcher: $this->eventDispacther,
+            validator: $this->validator
         );
 
         expect(function () use ($signUpInputDto, $signUpUseCase) {
@@ -96,6 +101,7 @@ describe('Sign Up UseCase', function () {
             hasher: $this->hasher,
             dbTransaction: $this->dbTransaction,
             eventDispatcher: $this->eventDispacther,
+            validator: $this->validator
         );
 
         expect(function () use ($signUpInputDto, $signUpUseCase) {

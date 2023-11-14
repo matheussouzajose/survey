@@ -2,14 +2,12 @@
 
 use Core\Application\UseCase\Account\SignUp\SignUpUseCase;
 use Core\Ui\Api\Controller\Account\SignUpController;
-use Core\Ui\Api\Validator\SignUpValidatorRequest;
 
 describe('Sign Up Controller', function () {
     it('Should ensure sign up account success', function () {
         $useCase = spy(SignUpUseCase::class);
-        $validation = new SignUpValidatorRequest();
 
-        $controller = new SignUpController(useCase: $useCase, validation: $validation);
+        $controller = new SignUpController(useCase: $useCase);
 
         $request = new \stdClass();
         $request->first_name = 'Matheus';

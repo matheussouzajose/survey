@@ -11,6 +11,7 @@ class SignUpInputDto
         public string $lastName,
         public string $email,
         public string $password,
+        public string $passwordConfirmation,
     ) {
     }
 }

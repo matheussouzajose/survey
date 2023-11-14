@@ -32,6 +32,9 @@ class Account
     #[ORM\Column(type: 'datetime', nullable: true)]
     private \DateTimeInterface $updatedAt;
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    private string $accessToken;
+
     public function getId(): string
     {
         return $this->id;
@@ -101,4 +104,15 @@ class Account
     {
         $this->updatedAt = $updatedAt;
     }
+
+    public function getAccessToken(): ?string
+    {
+        return $this->accessToken ?? null;
+    }
+
+    public function setAccessToken(string $accessToken): void
+    {
+        $this->accessToken = $accessToken;
+    }
+
 }

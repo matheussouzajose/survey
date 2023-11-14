@@ -11,7 +11,7 @@
 |
 */
 
-// uses(Tests\TestCase::class)->in('Feature');
+ uses(Tests\TestCase::class)->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ function something()
 
 /**
  * @throws MissingMappingDriverImplementation
- * @throws ToolsException
+ * @throws ToolsException|Exception
  */
 function setupEntityManagerAndFixtures(): EntityManager
 {

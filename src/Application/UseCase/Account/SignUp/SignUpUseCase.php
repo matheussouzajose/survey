@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Core\Application\UseCase\Account\SignUp;
 
 use Core\Application\Interfaces\Cryptography\HasherInterface;
+use Core\Application\Interfaces\Validator\ValidatorInterface;
 use Core\Domain\Account\Entity\Account;
 use Core\Domain\Account\Event\AccountCreatedEvent;
 use Core\Domain\Account\Exceptions\EmailAlreadyInUseException;
@@ -16,10 +17,11 @@ use Core\Domain\Shared\Repository\DbTransactionInterface;
 class SignUpUseCase
 {
     public function __construct(
-        protected AccountRepositoryInterface $accountRepository,
-        protected HasherInterface $hasher,
-        protected DbTransactionInterface $dbTransaction,
-        protected EventDispatcher $eventDispatcher
+        private readonly AccountRepositoryInterface $accountRepository,
+        private readonly HasherInterface $hasher,
+        private readonly DbTransactionInterface $dbTransaction,
+        private readonly EventDispatcher $eventDispatcher,
+        private readonly ValidatorInterface $validator
     ) {
     }
 
@@ -29,8 +31,8 @@ class SignUpUseCase
     public function __invoke(SignUpInputDto $input): SignUpOutputDto
     {
         try {
+            $this->validator->validate(input: $input);
             $this->dbTransaction->beginTransaction();
-
             $this->checkEmailAvailability(email: $input->email);
 
             $result = $this->createAccount(
@@ -54,14 +56,14 @@ class SignUpUseCase
     /**
      * @throws EmailAlreadyInUseException
      */
-    protected function checkEmailAvailability(string $email): void
+    private function checkEmailAvailability(string $email): void
     {
         if ( $this->accountRepository->checkByEmail($email) ) {
             throw EmailAlreadyInUseException::email($email);
         }
     }
 
-    protected function hashPassword(string $plaintext): string
+    private function hashPassword(string $plaintext): string
     {
         return $this->hasher->hash($plaintext);
     }
@@ -69,7 +71,7 @@ class SignUpUseCase
     /**
      * @throws NotificationErrorException
      */
-    protected function createAccount(SignUpInputDto $input, string $hashedPassword): Account
+    private function createAccount(SignUpInputDto $input, string $hashedPassword): Account
     {
         return $this->accountRepository->add(
             new Account(
@@ -81,12 +83,12 @@ class SignUpUseCase
         );
     }
 
-    protected function dispatchAccountCreatedEvent(Account $account): void
+    private function dispatchAccountCreatedEvent(Account $account): void
     {
         $this->eventDispatcher->notify(new AccountCreatedEvent(account: $account));
     }
 
-    protected function output(Account $account): SignUpOutputDto
+    private function output(Account $account): SignUpOutputDto
     {
         return new SignUpOutputDto(
             id: $account->id(),

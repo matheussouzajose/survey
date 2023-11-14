@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Core\Ui\Api\Adapter\Http;
 
-class HttpHelpers
+class HttpResponseHelper
 {
     public static function ok($data): HttpResponseAdapter
     {

@@ -20,6 +20,7 @@ class Account extends Entity
         protected string $lastName,
         protected string $email,
         protected string $password,
+        protected ?string $accessToken = null,
         protected ?Uuid $id = null,
         protected ?\DateTimeInterface $createdAt = null,
         protected ?\DateTimeInterface $updatedAt = null
@@ -78,5 +79,15 @@ class Account extends Entity
         $this->updatedAt = new \DateTime();
 
         $this->validation();
+    }
+
+    public function changeAccessToken(string $token): void
+    {
+        $this->accessToken = $token;
+    }
+
+    public function fullName(): string
+    {
+        return "{$this->firstName} {$this->lastName}";
     }
 }

@@ -15,8 +15,8 @@ class AccountRepository extends EntityRepository implements AccountRepositoryInt
 {
     public function checkByEmail(string $email): bool
     {
-        $user = $this->findOneBy(['email' => $email]);
-        return ($user !== null);
+        $accountMapping = $this->findOneBy(['email' => $email]);
+        return ($accountMapping !== null);
     }
 
     /**
@@ -49,8 +49,36 @@ class AccountRepository extends EntityRepository implements AccountRepositoryInt
             lastName: $account->getLastName(),
             email: $account->getEmail(),
             password: $account->getPassword(),
+            accessToken: $account->getAccessToken(),
             id: new Uuid($account->getId()),
-            createdAt: $account->getCreatedAt(),
+            createdAt: $account->getCreatedAt()
         );
+    }
+
+    /**
+     * @throws NotificationErrorException
+     */
+    public function loadByEmail(string $email): ?Account
+    {
+        $accountMapping = $this->findOneBy(['email' => $email]);
+        if (!$accountMapping) {
+            return null;
+        }
+        return $this->createEntity(account: $accountMapping);
+    }
+
+    public function updateAccessToken(Account $entity): bool
+    {
+        $accountMapping = $this->find($entity->id());
+        if (!$accountMapping) {
+            return false;
+        }
+        $accountMapping->setAccessToken($entity->accessToken);
+
+        $em = $this->getEntityManager();
+        $em->persist($accountMapping);
+        $em->flush();
+
+        return true;
     }
 }
