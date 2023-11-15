@@ -25,6 +25,7 @@ class SignInUseCase
     {
         $this->validator->validate(input: $input);
 
+
         $account = $this->accountRepository->loadByEmail(email: $input->email);
         if ( !$account ) {
             throw InvalidCredentialsException::error();

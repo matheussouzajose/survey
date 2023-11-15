@@ -30,7 +30,7 @@ class AccountRepository extends EntityRepository implements AccountRepositoryInt
         $accountMapping->setLastName(last_name: $entity->lastName);
         $accountMapping->setEmail(email: $entity->email);
         $accountMapping->setPassword(password: $entity->password);
-        $accountMapping->setCreatedAt(createdAt: $entity->createdAt);
+        $accountMapping->setCreatedAt(created_at: $entity->createdAt);
 
         $em = $this->getEntityManager();
         $em->persist($accountMapping);
@@ -61,7 +61,7 @@ class AccountRepository extends EntityRepository implements AccountRepositoryInt
     public function loadByEmail(string $email): ?Account
     {
         $accountMapping = $this->findOneBy(['email' => $email]);
-        if (!$accountMapping) {
+        if ( !$accountMapping ) {
             return null;
         }
         return $this->createEntity(account: $accountMapping);
@@ -69,11 +69,11 @@ class AccountRepository extends EntityRepository implements AccountRepositoryInt
 
     public function updateAccessToken(Account $entity): bool
     {
-        $accountMapping = $this->find($entity->id());
-        if (!$accountMapping) {
+        $accountMapping = $this->find(id: $entity->id());
+        if ( !$accountMapping ) {
             return false;
         }
-        $accountMapping->setAccessToken($entity->accessToken);
+        $accountMapping->setAccessToken(access_token: $entity->accessToken);
 
         $em = $this->getEntityManager();
         $em->persist($accountMapping);
@@ -81,4 +81,17 @@ class AccountRepository extends EntityRepository implements AccountRepositoryInt
 
         return true;
     }
+
+    /**
+     * @throws NotificationErrorException
+     */
+    public function loadByToken(string $token): ?Account
+    {
+        $accountMapping = $this->findOneBy(['access_token' => $token]);
+        if ( !$accountMapping ) {
+            return null;
+        }
+        return $this->createEntity(account: $accountMapping);
+    }
+
 }

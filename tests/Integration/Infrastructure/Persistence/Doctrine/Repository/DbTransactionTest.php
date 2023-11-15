@@ -24,7 +24,7 @@ describe('DbTransaction Test', function () {
         $account->setLastName(last_name: 'Pedro');
         $account->setEmail(email: 'joao.pedro@mail.com');
         $account->setPassword(password: AccountFixtures::PASSWORD_DEFAULT);
-        $account->setCreatedAt(createdAt: new \DateTime(AccountFixtures::CREATED_AT_DEFAULT));
+        $account->setCreatedAt(created_at: new \DateTime(AccountFixtures::CREATED_AT_DEFAULT));
 
         return $account;
     }

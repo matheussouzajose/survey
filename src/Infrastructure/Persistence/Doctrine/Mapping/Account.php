@@ -27,13 +27,13 @@ class Account
     private string $password;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $createdAt;
+    private \DateTimeInterface $created_at;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private \DateTimeInterface $updatedAt;
+    private \DateTimeInterface $updated_at;
 
-    #[ORM\Column(type: 'string', nullable: true)]
-    private string $accessToken;
+    #[ORM\Column(type: 'string', length: 513, nullable: true)]
+    private string $access_token;
 
     public function getId(): string
     {
@@ -87,32 +87,32 @@ class Account
 
     public function getCreatedAt(): \DateTimeInterface
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): void
+    public function setCreatedAt(\DateTimeInterface $created_at): void
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $created_at;
     }
 
     public function getUpdatedAt(): \DateTimeInterface
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
+    public function setUpdatedAt(\DateTimeInterface $updated_at): void
     {
-        $this->updatedAt = $updatedAt;
+        $this->updated_at = $updated_at;
     }
 
     public function getAccessToken(): ?string
     {
-        return $this->accessToken ?? null;
+        return $this->access_token ?? null;
     }
 
-    public function setAccessToken(string $accessToken): void
+    public function setAccessToken(string $access_token): void
     {
-        $this->accessToken = $accessToken;
+        $this->access_token = $access_token;
     }
 
 }

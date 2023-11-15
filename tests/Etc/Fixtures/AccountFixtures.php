@@ -31,8 +31,8 @@ class AccountFixtures extends Fixture
         $account->setLastName(last_name: self::MATHEUS_LAST_NAME);
         $account->setEmail(email: self::MATHEUS_EMAIL);
         $account->setPassword(password: self::PASSWORD_DEFAULT);
-        $account->setCreatedAt(createdAt: new \DateTime(self::CREATED_AT_DEFAULT));
-        $account->setUpdatedAt(updatedAt: new \DateTime(self::UPDATED_AT_DEFAULT));
+        $account->setCreatedAt(created_at: new \DateTime(self::CREATED_AT_DEFAULT));
+        $account->setUpdatedAt(updated_at: new \DateTime(self::UPDATED_AT_DEFAULT));
 
         $manager->persist($account);
     }

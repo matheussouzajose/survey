@@ -32,7 +32,9 @@ class SignUpUseCase
     {
         try {
             $this->validator->validate(input: $input);
+
             $this->dbTransaction->beginTransaction();
+
             $this->checkEmailAvailability(email: $input->email);
 
             $result = $this->createAccount(

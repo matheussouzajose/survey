@@ -15,4 +15,6 @@ interface AccountRepositoryInterface
     public function loadByEmail(string $email): ?Account;
 
     public function updateAccessToken(Account $entity): bool;
+
+    public function loadByToken(string $token): ?Account;
 }
