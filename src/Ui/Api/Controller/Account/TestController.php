@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Ui\Api\Controller\Account;
 
 use Core\Ui\Api\Adapter\Http\HttpResponseAdapter;

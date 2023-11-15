@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Main\Decorators;
 
 use Core\Ui\Api\Adapter\Http\HttpResponseAdapter;

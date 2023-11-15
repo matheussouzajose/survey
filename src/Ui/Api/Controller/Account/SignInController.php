@@ -43,7 +43,7 @@ class SignInController implements ControllerInterface
         return match (true) {
             $e instanceof ValidationFailedException => HttpResponseHelper::unprocessable(errors: json_decode($error)),
             $e instanceof NotificationErrorException => HttpResponseHelper::unprocessable(errors: $error),
-            $e instanceof InvalidCredentialsException => HttpResponseHelper::unauthorized(),
+            $e instanceof InvalidCredentialsException => HttpResponseHelper::unauthorized(error: $error),
             default => HttpResponseHelper::serverError(),
         };
     }

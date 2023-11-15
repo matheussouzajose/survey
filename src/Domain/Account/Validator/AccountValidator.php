@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Core\Domain\Account\Validator;
 
-use Core\Domain\Shared\Validator\ValidatorEntityInterface;
+use Core\Domain\Shared\Validator\DomainValidatorInterface;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Validator as v;
 
-class AccountValidator implements ValidatorEntityInterface
+class AccountValidator implements DomainValidatorInterface
 {
     public const CONTEXT = 'account';
 

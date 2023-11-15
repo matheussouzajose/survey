@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Infrastructure\Cryptography\JwtAdapter;
 
 use Core\Application\Interfaces\Cryptography\EncrypterInterface;

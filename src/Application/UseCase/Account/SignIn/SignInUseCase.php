@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\UseCase\Account\SignIn;
 
 use Core\Application\Exception\InvalidCredentialsException;
@@ -24,7 +26,6 @@ class SignInUseCase
     public function __invoke(SignInInputDto $input): SignInOutputDto
     {
         $this->validator->validate(input: $input);
-
 
         $account = $this->accountRepository->loadByEmail(email: $input->email);
         if ( !$account ) {

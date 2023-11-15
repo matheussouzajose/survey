@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Core\Main\Middlewares;
 
-use Core\Application\Exception\ValidationFailedException;
-use Core\Domain\Account\Exceptions\EmailAlreadyInUseException;
-use Core\Domain\Shared\Exceptions\NotificationErrorException;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Exception\HttpMethodNotAllowedException;

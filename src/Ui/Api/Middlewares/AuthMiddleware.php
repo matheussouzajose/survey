@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Ui\Api\Middlewares;
 
 use Core\Domain\Account\Repository\AccountRepositoryInterface;

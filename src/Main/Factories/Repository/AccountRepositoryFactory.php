@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Main\Factories\Repository;
 
 use Core\Domain\Account\Repository\AccountRepositoryInterface;

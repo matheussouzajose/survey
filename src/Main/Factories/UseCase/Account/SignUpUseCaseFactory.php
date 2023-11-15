@@ -1,6 +1,8 @@
 <?php
 
-namespace Core\Main\Factories\UseCase;
+declare(strict_types=1);
+
+namespace Core\Main\Factories\UseCase\Account;
 
 use Core\Application\UseCase\Account\SignUp\SignUpUseCase;
 use Core\Domain\Shared\Event\EventDispatcher;

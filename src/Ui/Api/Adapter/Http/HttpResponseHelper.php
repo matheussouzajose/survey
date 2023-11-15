@@ -26,9 +26,9 @@ class HttpResponseHelper
         return new HttpResponseAdapter(statusCode: 204, body: $error);
     }
 
-    public static function unauthorized(): HttpResponseAdapter
+    public static function unauthorized($error): HttpResponseAdapter
     {
-        return new HttpResponseAdapter(statusCode: 204, body: 'UnauthorizedError');
+        return new HttpResponseAdapter(statusCode: 401, body: $error);
     }
 
     public static function forbidden($error): HttpResponseAdapter
