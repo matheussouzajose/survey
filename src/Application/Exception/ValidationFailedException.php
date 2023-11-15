@@ -2,21 +2,13 @@
 
 namespace Core\Application\Exception;
 
-final class ValidationFailedException extends \Exception
+class ValidationFailedException extends \Exception
 {
-    /**
-     * @var array
-     */
-    private $errors;
-
-    public function __construct(array $errors)
+    public static function error(array $errors): ValidationFailedException
     {
-        parent::__construct('Validation failed');
-        $this->errors = $errors;
-    }
-
-    public function getErrors(): array
-    {
-        return $this->errors;
+        return new self(
+            message: json_encode($errors),
+            code: 422
+        );
     }
 }

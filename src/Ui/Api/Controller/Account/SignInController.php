@@ -24,7 +24,7 @@ class SignInController implements ControllerInterface
         try {
             $response = ($this->useCase)(input: $this->createFromRequest(request: $request));
             return HttpResponseHelper::ok((array)$response);
-        } catch (InvalidCredentialsException|NotificationErrorException|ValidationFailedException $e) {
+        } catch (\Throwable $e) {
             return $this->handleApplicationException($e);
         }
     }
@@ -39,14 +39,12 @@ class SignInController implements ControllerInterface
 
     private function handleApplicationException($e): HttpResponseAdapter
     {
-        if ( $e instanceof ValidationFailedException || $e instanceof NotificationErrorException ) {
-            return HttpResponseHelper::unprocessable(errors: $e->getErrors());
-        }
-
-        if ( $e instanceof InvalidCredentialsException ) {
-            return HttpResponseHelper::unauthorized();
-        }
-
-        return HttpResponseHelper::serverError();
+        $error = $e->getMessage();
+        return match (true) {
+            $e instanceof ValidationFailedException => HttpResponseHelper::unprocessable(errors: json_decode($error)),
+            $e instanceof NotificationErrorException => HttpResponseHelper::unprocessable(errors: $error),
+            $e instanceof InvalidCredentialsException => HttpResponseHelper::unauthorized(),
+            default => HttpResponseHelper::serverError(),
+        };
     }
 }

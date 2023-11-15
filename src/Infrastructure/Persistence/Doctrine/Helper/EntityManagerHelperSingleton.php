@@ -8,6 +8,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Exception\MissingMappingDriverImplementation;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
@@ -36,6 +37,11 @@ class EntityManagerHelperSingleton
         return self::$entityManagerInstance;
     }
 
+    /**
+     * @throws MissingMappingDriverImplementation
+     * @throws Exception
+     * @throws ToolsException
+     */
     private static function getEntityManager(): EntityManager
     {
         $isTesting = getenv('APP_ENV') === 'testing';

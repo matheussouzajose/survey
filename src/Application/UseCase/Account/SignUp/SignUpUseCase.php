@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Core\Application\UseCase\Account\SignUp;
 
+use Core\Application\Exception\ValidationFailedException;
 use Core\Application\Interfaces\Cryptography\HasherInterface;
 use Core\Application\Interfaces\Validator\ValidatorInterface;
 use Core\Domain\Account\Entity\Account;
@@ -26,7 +27,8 @@ class SignUpUseCase
     }
 
     /**
-     * @throws EmailAlreadyInUseException|NotificationErrorException
+     * @throws EmailAlreadyInUseException|NotificationErrorException|ValidationFailedException
+     * @throws \Throwable
      */
     public function __invoke(SignUpInputDto $input): SignUpOutputDto
     {
@@ -49,8 +51,8 @@ class SignUpUseCase
             $this->dbTransaction->commit();
 
             return $this->output(account: $result);
-        } catch (EmailAlreadyInUseException|NotificationErrorException $exception) {
-            $this->dbTransaction->rollback();
+        } catch (EmailAlreadyInUseException|NotificationErrorException|\Throwable $exception) {
+//            $this->dbTransaction->rollback();
             throw $exception;
         }
     }

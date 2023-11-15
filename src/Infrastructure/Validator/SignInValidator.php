@@ -19,7 +19,7 @@ class SignInValidator implements ValidatorInterface
                 ->attribute('password', v::stringType()->length(6, null));
             $validator->assert(input: $input);
         } catch (ValidationException $exception) {
-            throw new ValidationFailedException(errors: $exception->getMessages());
+            throw ValidationFailedException::error(errors: $exception->getMessages());
         }
     }
 }

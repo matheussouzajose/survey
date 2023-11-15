@@ -24,7 +24,7 @@ class SignUpController implements ControllerInterface
         try {
             $response = ($this->useCase)(input: $this->createFromRequest(request: $request));
             return HttpResponseHelper::created((array)$response);
-        } catch (EmailAlreadyInUseException|NotificationErrorException|ValidationFailedException $e) {
+        } catch (\Throwable $e) {
             return $this->handleApplicationException($e);
         }
     }
@@ -40,16 +40,14 @@ class SignUpController implements ControllerInterface
         );
     }
 
-    private function handleApplicationException($e): HttpResponseAdapter
+    private function handleApplicationException(\Exception $e): HttpResponseAdapter
     {
-        if ( $e instanceof ValidationFailedException || $e instanceof NotificationErrorException ) {
-            return HttpResponseHelper::unprocessable(errors: $e->getErrors());
-        }
-
-        if ( $e instanceof EmailAlreadyInUseException ) {
-            return HttpResponseHelper::conflict(error: $e->getMessage());
-        }
-
-        return HttpResponseHelper::serverError();
+        $error = $e->getMessage();
+        return match (true) {
+            $e instanceof ValidationFailedException => HttpResponseHelper::unprocessable(errors: json_decode($error)),
+            $e instanceof NotificationErrorException => HttpResponseHelper::unprocessable(errors: $error),
+            $e instanceof EmailAlreadyInUseException => HttpResponseHelper::conflict(error: $error),
+            default => HttpResponseHelper::serverError(),
+        };
     }
 }

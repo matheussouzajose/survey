@@ -23,7 +23,7 @@ class SignUpValidator implements ValidatorInterface
 
             $validator->assert(input: $input);
         } catch (ValidationException $exception) {
-            throw new ValidationFailedException(errors: $exception->getMessages());
+            throw ValidationFailedException::error(errors: $exception->getMessages());
         }
     }
 }
