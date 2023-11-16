@@ -9,9 +9,8 @@ use Core\Ui\Api\ControllerInterface;
 
 class AddSurveyController implements ControllerInterface
 {
-
     public function __invoke(object $request): HttpResponseAdapter
     {
-        // TODO: Implement __invoke() method.
+
     }
 }
