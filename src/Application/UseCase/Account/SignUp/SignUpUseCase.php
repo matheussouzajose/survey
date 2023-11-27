@@ -20,7 +20,6 @@ class SignUpUseCase
     public function __construct(
         private readonly AccountRepositoryInterface $accountRepository,
         private readonly HasherInterface $hasher,
-        private readonly DbTransactionInterface $dbTransaction,
         private readonly EventDispatcher $eventDispatcher,
         private readonly ValidatorInterface $validator
     ) {
@@ -32,29 +31,20 @@ class SignUpUseCase
      */
     public function __invoke(SignUpInputDto $input): SignUpOutputDto
     {
-        try {
-            $this->validator->validate(input: $input);
+        $this->validator->validate(input: $input);
 
-            $this->dbTransaction->beginTransaction();
+        $this->checkEmailAvailability(email: $input->email);
 
-            $this->checkEmailAvailability(email: $input->email);
+        $result = $this->createAccount(
+            input: $input,
+            hashedPassword: $this->hashPassword(
+                plaintext: $input->password
+            )
+        );
 
-            $result = $this->createAccount(
-                input: $input,
-                hashedPassword: $this->hashPassword(
-                    plaintext: $input->password
-                )
-            );
+        $this->dispatchAccountCreatedEvent($result);
 
-            $this->dispatchAccountCreatedEvent($result);
-
-            $this->dbTransaction->commit();
-
-            return $this->output(account: $result);
-        } catch (EmailAlreadyInUseException|NotificationErrorException|\Throwable $exception) {
-//            $this->dbTransaction->rollback();
-            throw $exception;
-        }
+        return $this->output(account: $result);
     }
 
     /**

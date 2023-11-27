@@ -42,6 +42,31 @@ services:
     networks:
       - network-survey
 
+  mongodb:
+    image: mongo:6.0.6
+    container_name: mongodb-survey
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME:admin
+      - MONGO_INITDB_ROOT_PASSWORD:102030
+    command: mongod --port 27014
+    ports:
+      - "27014:27014"
+    volumes:
+#      - ./.docker/db/init-db:/docker-entrypoint-initdb.d
+#      - ./.docker/db/dbs:/dbs
+      - ./.docker/mongo/db/files:/data/db
+    networks:
+      - network-survey
+
+  redis:
+    image: redis:alpine
+    container_name: redis-survey
+    ports:
+      - "6379:6379"
+    networks:
+      - network-survey
+
 networks:
   network-survey:
     driver: bridge

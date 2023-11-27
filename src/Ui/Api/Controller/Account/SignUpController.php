@@ -25,6 +25,7 @@ class SignUpController implements ControllerInterface
             $response = ($this->useCase)(input: $this->createFromRequest(request: $request));
             return HttpResponseHelper::created((array)$response);
         } catch (\Throwable $e) {
+//            dd($e);
             return $this->handleApplicationException($e);
         }
     }
@@ -47,7 +48,7 @@ class SignUpController implements ControllerInterface
             $e instanceof ValidationFailedException => HttpResponseHelper::unprocessable(errors: json_decode($error)),
             $e instanceof NotificationErrorException => HttpResponseHelper::unprocessable(errors: $error),
             $e instanceof EmailAlreadyInUseException => HttpResponseHelper::conflict(error: $error),
-            default => HttpResponseHelper::serverError(),
+            default => HttpResponseHelper::serverError($e),
         };
     }
 }

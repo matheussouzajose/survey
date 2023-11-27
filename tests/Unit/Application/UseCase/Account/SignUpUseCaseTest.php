@@ -10,7 +10,6 @@ use Core\Domain\Account\Event\AccountCreatedEvent;
 use Core\Domain\Account\Exceptions\EmailAlreadyInUseException;
 use Core\Domain\Account\Repository\AccountRepositoryInterface;
 use Core\Domain\Shared\Event\EventDispatcher;
-use Core\Domain\Shared\Repository\DbTransactionInterface;
 
 describe('Sign Up UseCase', function () {
     $signUpInputDto = new SignUpInputDto(
@@ -24,7 +23,6 @@ describe('Sign Up UseCase', function () {
     beforeEach(function () {
         $this->accountRepository = spy(AccountRepositoryInterface::class);
         $this->hasher = spy(HasherInterface::class);
-        $this->dbTransaction = spy(DbTransactionInterface::class);
         $this->eventDispacther = spy(EventDispatcher::class);
 
         $this->accountRepository->shouldReceive('add')->andReturn(
@@ -41,7 +39,6 @@ describe('Sign Up UseCase', function () {
         $this->signUpUseCase = new SignUpUseCase(
             accountRepository: $this->accountRepository,
             hasher: $this->hasher,
-            dbTransaction: $this->dbTransaction,
             eventDispatcher: $this->eventDispacther,
             validator: $this->validator
         );
@@ -77,7 +74,6 @@ describe('Sign Up UseCase', function () {
         $signUpUseCase = new SignUpUseCase(
             accountRepository: $this->accountRepository,
             hasher: $hasher,
-            dbTransaction: $this->dbTransaction,
             eventDispatcher: $this->eventDispacther,
             validator: $this->validator
         );
@@ -99,7 +95,6 @@ describe('Sign Up UseCase', function () {
         $signUpUseCase = new SignUpUseCase(
             accountRepository: $accountRepository,
             hasher: $this->hasher,
-            dbTransaction: $this->dbTransaction,
             eventDispatcher: $this->eventDispacther,
             validator: $this->validator
         );
@@ -119,12 +114,6 @@ describe('Sign Up UseCase', function () {
         expect($result->firstName)->toBe('Matheus');
         expect($result->lastName)->toBe('Jose');
         expect($result->email)->toBe('matheus.jose@mail.com');
-    });
-
-    it('Should invoke commit once', function () use ($signUpInputDto) {
-        ($this->signUpUseCase)(input: $signUpInputDto);
-
-        $this->dbTransaction->shouldHaveReceived('commit')->once();
     });
 
     it('Should invoke event dispatcher with correct value', function () use ($signUpInputDto) {

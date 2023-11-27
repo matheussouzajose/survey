@@ -8,7 +8,7 @@ use Core\Application\UseCase\Account\SignIn\SignInUseCase;
 use Core\Infrastructure\Cryptography\JwtAdapter\JwtAdapter;
 use Core\Infrastructure\Cryptography\PasswordAdapter\PasswordAdapter;
 use Core\Infrastructure\Validator\SignInValidator;
-use Core\Main\Factories\Repository\AccountRepositoryFactory;
+use Core\Main\Factories\Repository\MongoDb\AccountMongoRepositoryFactory;
 
 class SignInUseCaseFactory
 {
@@ -16,7 +16,7 @@ class SignInUseCaseFactory
     {
         return new SignInUseCase(
             validator: new SignInValidator(),
-            accountRepository: AccountRepositoryFactory::create(),
+            accountRepository: AccountMongoRepositoryFactory::create(),
             hasher: new PasswordAdapter(),
             encrypter: new JwtAdapter(secretKey: getenv('JWT_SECRET'))
         );

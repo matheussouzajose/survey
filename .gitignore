@@ -3,3 +3,4 @@
 /vendor
 .env
 /.docker/dbdata/
+/.docker/mongo/db

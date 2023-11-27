@@ -1,49 +1,52 @@
 {
-    "name": "matheussouzajose/survey",
-    "description": "Survey Project",
-    "type": "project",
-    "autoload": {
-        "psr-4": {
-            "Core\\": "src/",
-            "Tests\\": "tests/"
-        }
+  "name": "matheussouzajose/survey",
+  "description": "Survey Project",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Core\\": "src/",
+      "Tests\\": "tests/"
     },
-    "authors": [
-        {
-            "name": "Matheus Souza Jose",
-            "email": "matheus.jose@aluno.faculdadeimpacta.com.br"
-        }
-    ],
-    "require-dev": {
-        "pestphp/pest": "^2.24",
-        "phpstan/phpstan": "^1.10",
-        "respect/validation": "^2.2",
-        "mockery/mockery": "^1.6",
-        "doctrine/doctrine-fixtures-bundle": "^3.4"
-    },
-    "scripts": {
-        "test": [
-            "vendor/bin/pest"
-        ],
-        "install-pest": [
-            "composer require pestphp/pest --dev"
-        ]
-    },
-    "config": {
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
-    },
-    "require": {
-        "ramsey/uuid": "^4.7",
-        "doctrine/orm": "^2.16",
-        "doctrine/doctrine-bundle": "^2.10",
-        "doctrine/annotations": "^2.0",
-        "slim/slim": "^4.0",
-        "slim/http": "^1.3",
-        "slim/psr7": "^1.6",
-        "vlucas/phpdotenv": "^5.5",
-        "firebase/php-jwt": "^6.9",
-        "doctrine/migrations": "^3.7"
+    "files": ["src/helpers.php"]
+  },
+  "authors": [
+    {
+      "name": "Matheus Souza Jose",
+      "email": "matheus.jose@aluno.faculdadeimpacta.com.br"
     }
+  ],
+  "require-dev": {
+    "pestphp/pest": "^2.24",
+    "phpstan/phpstan": "^1.10",
+    "respect/validation": "^2.2",
+    "mockery/mockery": "^1.6",
+    "doctrine/doctrine-fixtures-bundle": "^3.4"
+  },
+  "scripts": {
+    "test": [
+      "vendor/bin/pest"
+    ],
+    "install-pest": [
+      "composer require pestphp/pest --dev"
+    ]
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "require": {
+    "ramsey/uuid": "^4.7",
+    "doctrine/orm": "^2.16",
+    "doctrine/doctrine-bundle": "^2.10",
+    "doctrine/annotations": "^2.0",
+    "slim/slim": "^4.0",
+    "slim/http": "^1.3",
+    "slim/psr7": "^1.6",
+    "vlucas/phpdotenv": "^5.5",
+    "firebase/php-jwt": "^6.9",
+    "doctrine/migrations": "^3.7",
+    "mongodb/mongodb": "^1.17",
+    "ext-mongodb": "*"
+  }
 }

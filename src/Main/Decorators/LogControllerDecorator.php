@@ -17,6 +17,7 @@ class LogControllerDecorator implements ControllerInterface
     {
         $httpResponse = ($this->controller)($request);
         if ( $httpResponse->getStatusCode() === 500 ) {
+//            dd($httpResponse->getBody());
         }
 
         return $httpResponse;
