@@ -26,7 +26,7 @@ class SignUpUseCase
     }
 
     /**
-     * @throws EmailAlreadyInUseException|NotificationErrorException|ValidationFailedException
+     * @throws EmailAlreadyInUseException|NotificationErrorException
      * @throws \Throwable
      */
     public function __invoke(SignUpInputDto $input): SignUpOutputDto

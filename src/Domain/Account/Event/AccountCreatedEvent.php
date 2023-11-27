@@ -15,11 +15,11 @@ class AccountCreatedEvent implements EventInterface
 
     public function dateTimeOccurred(): \DateTimeInterface
     {
-        // TODO: Implement dateTimeOccurred() method.
+        return new \DateTime();
     }
 
-    public function eventData()
+    public function eventData(): Account
     {
-        // TODO: Implement eventData() method.
+        return $this->account;
     }
 }

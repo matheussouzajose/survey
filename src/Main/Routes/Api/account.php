@@ -1,5 +1,7 @@
 <?php
 
+use Core\Domain\Account\Event\AccountCreatedEvent;
+use Core\Domain\Account\Event\Handler\SendEmailWhenAccountIsCreated;
 use Core\Main\Adapters\SlimMiddlewareAdapter;
 use Core\Main\Adapters\SlimRouteAdapter;
 use Core\Main\Factories\Controller\Account\SignInControllerFactory;
