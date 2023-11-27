@@ -20,7 +20,7 @@ describe('Survey Answer', function () {
             ['Matheus', '', 'matheus.jose@mail.com', '123456789'],
             ['Matheus', 'Jose', '', '123456789'],
             ['Matheus', 'Jose', 'matheus.jose@mail.com', ''],
-        ])->only();
+        ]);
 
     it('Should ensure account are correct values', function () {
         $account = new Account(
