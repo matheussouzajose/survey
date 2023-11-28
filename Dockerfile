@@ -7,7 +7,9 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    openssl \
+    libssl-dev
 
 RUN apt-get install -y librdkafka-dev
 
@@ -22,6 +24,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
+
+# Instalar extensão do MongoDB
+RUN pecl install mongodb \
+    && docker-php-ext-enable mongodb
 
 RUN pecl install rdkafka
 

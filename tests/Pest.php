@@ -11,7 +11,7 @@
 |
 */
 
-// uses(Tests\TestCase::class)->in('Feature');
+ uses(Tests\TestCase::class)->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +23,14 @@
 | to assert different things. Of course, you may extend the Expectation API at any time.
 |
 */
+
+use Core\Infrastructure\Persistence\Doctrine\Helper\EntityManagerHelperSingleton;
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Exception\MissingMappingDriverImplementation;
+use Doctrine\ORM\Tools\ToolsException;
+use Tests\Etc\Fixtures\AccountFixtures;
 
 expect()->extend('toBeOne', function () {
     return $this->toBe(1);
@@ -42,4 +50,28 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+/**
+ * @throws MissingMappingDriverImplementation
+ * @throws ToolsException|Exception
+ */
+function setupEntityManagerAndFixtures(): EntityManager
+{
+    $entityManager = EntityManagerHelperSingleton::getInstance();
+    $purger = new ORMPurger();
+    $executor = new ORMExecutor($entityManager, $purger);
+    $executor->execute([new AccountFixtures()], true);
+
+    return $entityManager;
+}
+
+function beginTransaction($entityManager): void
+{
+    $entityManager->getConnection()->beginTransaction();
+}
+
+function rollBackTransaction($entityManager): void
+{
+    $entityManager->getConnection()->rollBack();
 }

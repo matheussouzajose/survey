@@ -15,4 +15,9 @@
             <directory suffix=".php">./src</directory>
         </include>
     </source>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="MONGODB_URI" value="mongodb://mongodb:27014"/>
+        <env name="MONGODB_DATABASE" value="testing"/>
+    </php>
 </phpunit>
