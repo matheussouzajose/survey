@@ -48,6 +48,11 @@ class HttpResponseHelper
 
     public static function serverError($error = null): HttpResponseAdapter
     {
-        return new HttpResponseAdapter(statusCode: 500, body: (string)$error->getMessage());
+        $body = [
+            'message' => $error->getMessage(),
+            'trace' => $error->getTrace()[0],
+        ];
+
+        return new HttpResponseAdapter(statusCode: 500, body: $body);
     }
 }

@@ -25,7 +25,6 @@ class SignUpController implements ControllerInterface
             $response = ($this->useCase)(input: $this->createFromRequest(request: $request));
             return HttpResponseHelper::created((array)$response);
         } catch (\Throwable $e) {
-//            dd($e);
             return $this->handleApplicationException($e);
         }
     }

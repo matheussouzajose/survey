@@ -9,6 +9,7 @@ use Core\Application\UseCase\Account\SignIn\SignInOutputDto;
 use Core\Application\UseCase\Account\SignIn\SignInUseCase;
 use Core\Domain\Account\Entity\Account;
 use Core\Domain\Account\Repository\AccountRepositoryInterface;
+use Core\Domain\Shared\Event\EventDispatcherInterface;
 use Core\Domain\Shared\ValueObject\Uuid;
 use Tests\Etc\Fixtures\AccountFixtures;
 
@@ -23,6 +24,7 @@ describe('Sign In UseCase', function () {
         $this->accountRepository = spy(AccountRepositoryInterface::class);
         $this->hasher = spy(HasherInterface::class);
         $this->encrypter = spy(EncrypterInterface::class);
+        $this->eventDispatcher = spy(EventDispatcherInterface::class);
 
         $this->accountRepository->shouldReceive('loadByEmail')->andReturn(
             new Account(
@@ -42,6 +44,7 @@ describe('Sign In UseCase', function () {
             accountRepository: $this->accountRepository,
             hasher: $this->hasher,
             encrypter: $this->encrypter,
+            eventDispatcher: $this->eventDispatcher
         );
     });
 
@@ -54,6 +57,7 @@ describe('Sign In UseCase', function () {
             accountRepository: $accountRepository,
             hasher: $this->hasher,
             encrypter: $this->encrypter,
+            eventDispatcher: $this->eventDispatcher
         );
 
         expect(function () use ($signInInputDto) {
@@ -76,6 +80,7 @@ describe('Sign In UseCase', function () {
             accountRepository: $this->accountRepository,
             hasher: $hasher,
             encrypter: $this->encrypter,
+            eventDispatcher: $this->eventDispatcher
         );
 
         expect(function () use ($signInInputDto) {
