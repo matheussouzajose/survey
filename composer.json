@@ -7,7 +7,7 @@
       "Core\\": "src/",
       "Tests\\": "tests/"
     },
-    "files": ["src/helpers.php"]
+    "files": ["src/helpers.php", "src/Ui/Api/Adapter/Http/http-helper.php"]
   },
   "authors": [
     {

@@ -11,12 +11,21 @@ use Core\Domain\Shared\Event\EventDispatcher;
 use Core\Infrastructure\Cryptography\JwtAdapter\JwtAdapter;
 use Core\Infrastructure\Cryptography\PasswordAdapter\PasswordAdapter;
 use Core\Infrastructure\Persistence\MongoDb\Repository\LogMongoRepository;
-use Core\Infrastructure\Validator\SignInValidator;
 use Core\Main\Factories\Repository\MongoDb\AccountMongoRepositoryFactory;
 
 class SignInUseCaseFactory
 {
-    public static function create(): SignInUseCase
+    public function create(): SignInUseCase
+    {
+        return new SignInUseCase(
+            accountRepository: (new AccountMongoRepositoryFactory)->create(),
+            hasher: new PasswordAdapter(),
+            encrypter: new JwtAdapter(secretKey: getenv('JWT_SECRET')),
+            eventDispatcher: $this->registerEvents()
+        );
+    }
+
+    private function registerEvents(): EventDispatcher
     {
         $eventDispatcher = new EventDispatcher();
         $eventDispatcher->register(
@@ -26,12 +35,6 @@ class SignInUseCaseFactory
             )
         );
 
-        return new SignInUseCase(
-            validator: new SignInValidator(),
-            accountRepository: AccountMongoRepositoryFactory::create(),
-            hasher: new PasswordAdapter(),
-            encrypter: new JwtAdapter(secretKey: getenv('JWT_SECRET')),
-            eventDispatcher: $eventDispatcher
-        );
+        return $eventDispatcher;
     }
 }

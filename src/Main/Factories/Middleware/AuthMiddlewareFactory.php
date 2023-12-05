@@ -10,10 +10,10 @@ use Core\Ui\Api\Middlewares\AuthMiddleware;
 
 class AuthMiddlewareFactory
 {
-    public static function create(): MiddlewareInterface
+    public function create(): MiddlewareInterface
     {
         return new AuthMiddleware(
-            accountRepository: AccountMongoRepositoryFactory::create()
+            accountRepository: (new AccountMongoRepositoryFactory)->create()
         );
     }
 }

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 
 class SurveyRepositoryFactory
 {
-    public static function create(): SurveyRepositoryInterface
+    public function create(): SurveyRepositoryInterface
     {
         return new SurveyRepository(
             em: EntityManagerHelperSingleton::getInstance(),

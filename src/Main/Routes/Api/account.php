@@ -1,7 +1,5 @@
 <?php
 
-use Core\Domain\Account\Event\AccountCreatedEvent;
-use Core\Domain\Account\Event\Handler\SendEmailWhenAccountIsCreated;
 use Core\Main\Adapters\SlimMiddlewareAdapter;
 use Core\Main\Adapters\SlimRouteAdapter;
 use Core\Main\Factories\Controller\Account\SignInControllerFactory;
@@ -17,9 +15,9 @@ return function (RouteCollectorProxy $app) {
         $response->getBody()->write(json_encode(['ping']));
         return $response->withStatus(200);
     });
-    $app->post('/v1/sign-up', new SlimRouteAdapter(controller: SignUpControllerFactory::create()));
-    $app->post('/v1/sign-in', new SlimRouteAdapter(controller: SignInControllerFactory::create()));
+    $app->post('/v1/sign-up', new SlimRouteAdapter(controller: (new SignUpControllerFactory)->create()));
+    $app->post('/v1/sign-in', new SlimRouteAdapter(controller: (new SignInControllerFactory)->create()));
     $app->post('/v1/teste', new SlimRouteAdapter(controller: new TestController()))->add(
-        middleware: new SlimMiddlewareAdapter(AuthMiddlewareFactory::create())
+        middleware: new SlimMiddlewareAdapter((new AuthMiddlewareFactory)->create())
     );
 };

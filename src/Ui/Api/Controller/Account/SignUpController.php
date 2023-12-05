@@ -4,28 +4,46 @@ declare(strict_types=1);
 
 namespace Core\Ui\Api\Controller\Account;
 
-use Core\Application\Exception\ValidationFailedException;
+use Core\Application\UseCase\Account\SignIn\SignInInputDto;
+use Core\Application\UseCase\Account\SignIn\SignInUseCase;
 use Core\Application\UseCase\Account\SignUp\SignUpInputDto;
 use Core\Application\UseCase\Account\SignUp\SignUpUseCase;
 use Core\Domain\Account\Exceptions\EmailAlreadyInUseException;
-use Core\Domain\Shared\Exceptions\NotificationErrorException;
 use Core\Ui\Api\Adapter\Http\HttpResponseAdapter;
-use Core\Ui\Api\Adapter\Http\HttpResponseHelper;
 use Core\Ui\Api\ControllerInterface;
+use Core\Ui\Api\Validation\ValidationInterface;
 
 class SignUpController implements ControllerInterface
 {
-    public function __construct(private readonly SignUpUseCase $useCase)
-    {
+    public function __construct(
+        private readonly ValidationInterface $validation,
+        private readonly SignUpUseCase $useCase,
+        private readonly SignInUseCase $signInUseCase
+    ) {
     }
 
     public function __invoke(object $request): HttpResponseAdapter
     {
         try {
-            $response = ($this->useCase)(input: $this->createFromRequest(request: $request));
-            return HttpResponseHelper::created((array)$response);
+            $error = $this->validation->validate(input: $request);
+            if ( $error ) {
+                return badRequest(error: $error);
+            }
+
+            $isValid = ($this->useCase)(input: $this->createFromRequest(request: $request));
+            if ( !$isValid ) {
+                return forbidden(EmailAlreadyInUseException::email(email: $request->email));
+            }
+
+            $authentication = ($this->signInUseCase)(
+                new SignInInputDto(
+                    email: $request->email,
+                    password: $request->password
+                )
+            );
+            return ok((array)$authentication);
         } catch (\Throwable $e) {
-            return $this->handleApplicationException($e);
+            return serverError($e);
         }
     }
 
@@ -38,16 +56,5 @@ class SignUpController implements ControllerInterface
             password: $request->password ?? '',
             passwordConfirmation: $request->password_confirmation ?? '',
         );
-    }
-
-    private function handleApplicationException(\Exception $e): HttpResponseAdapter
-    {
-        $error = $e->getMessage();
-        return match (true) {
-            $e instanceof ValidationFailedException => HttpResponseHelper::unprocessable(errors: json_decode($error)),
-            $e instanceof NotificationErrorException => HttpResponseHelper::unprocessable(errors: $error),
-            $e instanceof EmailAlreadyInUseException => HttpResponseHelper::conflict(error: $error),
-            default => HttpResponseHelper::serverError($e),
-        };
     }
 }

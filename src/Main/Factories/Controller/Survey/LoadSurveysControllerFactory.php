@@ -6,7 +6,7 @@ namespace Core\Main\Factories\Controller\Survey;
 
 use Core\Infrastructure\Persistence\MongoDb\Repository\LogMongoRepository;
 use Core\Main\Decorators\LogControllerDecorator;
-use Core\Ui\Api\Controller\Survey\Survey\LoadSurveysController;
+use Core\Ui\Api\Controller\Survey\LoadSurveysController;
 use Core\Ui\Api\ControllerInterface;
 
 class LoadSurveysControllerFactory

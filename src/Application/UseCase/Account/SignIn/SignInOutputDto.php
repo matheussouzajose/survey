@@ -6,7 +6,7 @@ namespace Core\Application\UseCase\Account\SignIn;
 
 class SignInOutputDto
 {
-    public function __construct(public string $accessToken, public string $name)
+    public function __construct(public array $authentication, public string $name)
     {
     }
 }

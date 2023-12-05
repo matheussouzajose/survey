@@ -6,8 +6,8 @@ namespace Core\Ui\Api\Middlewares;
 
 use Core\Domain\Account\Repository\AccountRepositoryInterface;
 use Core\Ui\Api\Adapter\Http\HttpResponseAdapter;
-use Core\Ui\Api\Adapter\Http\HttpResponseHelper;
 use Core\Ui\Api\MiddlewareInterface;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 
 class AuthMiddleware implements MiddlewareInterface
 {
@@ -22,13 +22,12 @@ class AuthMiddleware implements MiddlewareInterface
                 $accessToken = $this->removeBearer($request->Authorization[0]);
                 $account = $this->accountRepository->loadByToken(token: $accessToken);
                 if ($account) {
-                    return HttpResponseHelper::ok(['userId' => $account->id()]);
+                    return ok(['userId' => $account->id()]);
                 }
             }
-
-            return HttpResponseHelper::forbidden('Access Denied');
+            return forbidden(new AccessDeniedException('Access Denied'));
         } catch (\Exception $exception) {
-            return HttpResponseHelper::serverError();
+            return serverError($exception);
         }
     }
 

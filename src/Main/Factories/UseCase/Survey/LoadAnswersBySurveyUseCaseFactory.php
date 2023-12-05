@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Core\Main\Factories\UseCase\Survey;
 
-use Core\Application\UseCase\Survey\Survey\LoadAnswers\LoadAnswersBySurveyUseCase;
+use Core\Application\UseCase\Survey\LoadAnswers\LoadAnswersBySurveyUseCase;
 
 class LoadAnswersBySurveyUseCaseFactory
 {

@@ -7,7 +7,7 @@ use Core\Infrastructure\Persistence\MongoDb\Repository\AccountMongoRepository;
 
 class AccountMongoRepositoryFactory
 {
-    public static function create(): AccountRepositoryInterface
+    public function create(): AccountRepositoryInterface
     {
         return new AccountMongoRepository();
     }

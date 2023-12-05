@@ -22,3 +22,6 @@ composer test
 exit
 composer test
 exit
+composer dumpautoload
+clear
+exit

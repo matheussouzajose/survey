@@ -4,28 +4,36 @@ declare(strict_types=1);
 
 namespace Core\Ui\Api\Controller\Account;
 
-use Core\Application\Exception\InvalidCredentialsException;
-use Core\Application\Exception\ValidationFailedException;
 use Core\Application\UseCase\Account\SignIn\SignInInputDto;
 use Core\Application\UseCase\Account\SignIn\SignInUseCase;
-use Core\Domain\Shared\Exceptions\NotificationErrorException;
 use Core\Ui\Api\Adapter\Http\HttpResponseAdapter;
-use Core\Ui\Api\Adapter\Http\HttpResponseHelper;
 use Core\Ui\Api\ControllerInterface;
+use Core\Ui\Api\Validation\ValidationInterface;
 
 class SignInController implements ControllerInterface
 {
-    public function __construct(private readonly SignInUseCase $useCase)
-    {
+    public function __construct(
+        private readonly ValidationInterface $validation,
+        private readonly SignInUseCase $useCase,
+    ) {
     }
 
     public function __invoke(object $request): HttpResponseAdapter
     {
         try {
-            $response = ($this->useCase)(input: $this->createFromRequest(request: $request));
-            return HttpResponseHelper::ok((array)$response);
+            $error = $this->validation->validate(input: $request);
+            if ( $error ) {
+                return badRequest(error: $error);
+            }
+
+            $authentication = ($this->useCase)(input: $this->createFromRequest(request: $request));
+            if ( !$authentication ) {
+                return unauthorized();
+            }
+
+            return ok((array)$authentication);
         } catch (\Throwable $e) {
-            return $this->handleApplicationException($e);
+            return serverError($e);
         }
     }
 
@@ -35,16 +43,5 @@ class SignInController implements ControllerInterface
             email: $request->email ?? '',
             password: $request->password ?? '',
         );
-    }
-
-    private function handleApplicationException($e): HttpResponseAdapter
-    {
-        $error = $e->getMessage();
-        return match (true) {
-            $e instanceof ValidationFailedException => HttpResponseHelper::unprocessable(errors: json_decode($error)),
-            $e instanceof NotificationErrorException => HttpResponseHelper::unprocessable(errors: $error),
-            $e instanceof InvalidCredentialsException => HttpResponseHelper::unauthorized(error: $error),
-            default => HttpResponseHelper::serverError(),
-        };
     }
 }
